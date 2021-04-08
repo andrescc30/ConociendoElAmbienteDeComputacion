@@ -1,0 +1,72 @@
+Los permisos de los archivos en Linux (o GNU/Linux) tienen mucha importancia. Solemos tener varios usuarios en nuestro equipo y no todos tienen acceso a modificar o trabajar con todos los ficheros. En este artículo vamos a ver cómo funcionan los permisos, ya que es algo que veo de vital importancia a la hora de mantener, por ejemplo, un servidor o nuestro propio ordenador.
+
+Cada archivo contiene información sobre sí mismo:
+
+Dueño del archivo.
+Grupo del archivo.
+Permisos del archivo.
+Cada usuario va a pertenecer como mínimo a un grupo, el cual le es asignado en la creación de dicho usuario. Los grupos sirven para tener una política de acceso a archivos en la cual podremos dar acceso a los usuarios de un determinado grupo. De esta manera, quien no pertenezca a dicho grupo, no tendrá acceso.
+
+Tipos de permisos
+Existen 3 tipos de permisos:
+
+Lectura: permite a un cierto usuario ver el contenido de un archivo. Si es un directorio, el contenido del mismo.
+Escritura: permite modificar un archivo. Si es un directorio, el contenido del mismo.
+Ejecución: si existe algo que ejecutar, se podrá hacer con este permiso.
+Análisis de permisos
+Es posible que hayáis visto letras como r, w o x al listar un directorio. Pero, ¿qué significan estas letras? Antes de nada, vamos a listar un directorio con el comando:
+
+ls -l
+Veremos algo parecido a esto:
+
+drwxr-xr-x  2 mario mario     4096 jul 27 22:00 Descargas
+drwxr-xr-x  3 mario mario     4096 jul 17 12:39 Documentos
+Lo primero que vemos son 10 caracteres: drwxr-xr-x. El primer caracter representa el tipo de archivo. Los 3 siguientes los permisos de usuario, los 3 siguientes los permisos de grupo y los 3 últimos los permisos para otros:
+
+d: tipo de archivo.
+rwx: permisos de propietario (lectura, escritura y ejecución).
+r-x: permisos de grupo (lectura y ejecución).
+r-x: permisos para el resto (lectura y ejecución).
+Tipos de archivo (primer caracter):
+Tipo de archivo	Significado
+-	Archivo común
+d	Directorio
+l	Enlace simbólico
+s	Socket
+p	Pipe 
+Permisos numéricos
+Como hemos visto, tenemos caracteres para los permisos de archivos, pero es algo incómodo cambiar los permisos con caracteres. Para hacerlo más sencillo, podemos utilizar números.
+
+Van  a ser 3 números que van del 0 al 7:
+
+Primer número: permisos de propietario.
+Segundo número: permisos de grupo.
+Tercer número: permisos para el resto.
+Para representar del 0 al 7 necesitamos 3 bits, que son los 3 bits utilizados para dar permisos a propietario, grupo y al resto. Con un '1' damos permiso y con un '0' se lo quitamos. Va en el siguiente orden: rwx.
+
+Binario	Decimal	Permisos	Descripción
+000	0	- - -	Ningún permiso
+001	1	- - x	Ejecución
+010	2	- w -	Escritura
+011	3	- w x	Escritura y ejecución
+100	4	r - -	Lectura
+101	5	r - x	Lectura y ejecución
+110	6	r w -	Lectura y escritura
+111	7	r w x	Lectura, escritura y ejecución 
+Ejemplos
+644:
+
+Propietario: lectura y escritura.
+Grupo: lectura.
+Resto: lectura.
+755:
+
+Propietario: lectura, escritura y ejecución.
+Grupo: lectura y ejecución.
+Resto: lectura y ejecución.
+777:
+
+Propietario: lectura, escritura y ejecución.
+Grupo: lectura, escritura y ejecución.
+Resto: lectura, escritura y ejecución.
+Los permisos en Linux son algo muy importante para entender mejor cómo funciona nuestro sistema. Podemos utilizar la información de este artículo cuando usemos herramientas como chmod o mkdir a la hora de modificar permisos o crear nuevas carpetas o ficheros.

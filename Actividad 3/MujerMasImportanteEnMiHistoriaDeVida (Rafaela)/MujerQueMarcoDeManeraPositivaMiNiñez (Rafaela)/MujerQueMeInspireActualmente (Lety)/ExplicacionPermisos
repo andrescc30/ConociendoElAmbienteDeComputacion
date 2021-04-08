@@ -1,0 +1,237 @@
+Los permisos de los archivos en Linux (o GNU/Linux) tienen mucha importancia. Solemos tener varios usuarios en nuestro equipo y no todos tienen acceso a modificar o trabajar con todos los ficheros. En este artículo vamos a ver cómo funcionan los permisos, ya que es algo que veo de vital importancia a la hora de mantener, por ejemplo, un servidor o nuestro propio ordenador.
+
+Cada archivo contiene información sobre sí mismo:
+
+Dueño del archivo.
+Grupo del archivo.
+Permisos del archivo.
+Cada usuario va a pertenecer como mínimo a un grupo, el cual le es asignado en la creación de dicho usuario. Los grupos sirven para tener una política de acceso a archivos en la cual podremos dar acceso a los usuarios de un determinado grupo. De esta manera, quien no pertenezca a dicho grupo, no tendrá acceso.
+
+Tipos de permisos
+Existen 3 tipos de permisos:
+
+Lectura: permite a un cierto usuario ver el contenido de un archivo. Si es un directorio, el contenido del mismo.
+Escritura: permite modificar un archivo. Si es un directorio, el contenido del mismo.
+Ejecución: si existe algo que ejecutar, se podrá hacer con este permiso.
+Análisis de permisos
+Es posible que hayáis visto letras como r, w o x al listar un directorio. Pero, ¿qué significan estas letras? Antes de nada, vamos a listar un directorio con el comando:
+
+ls -l
+Veremos algo parecido a esto:
+
+drwxr-xr-x  2 mario mario     4096 jul 27 22:00 Descargas
+drwxr-xr-x  3 mario mario     4096 jul 17 12:39 Documentos
+Lo primero que vemos son 10 caracteres: drwxr-xr-x. El primer caracter representa el tipo de archivo. Los 3 siguientes los permisos de usuario, los 3 siguientes los permisos de grupo y los 3 últimos los permisos para otros:
+
+d: tipo de archivo.
+rwx: permisos de propietario (lectura, escritura y ejecución).
+r-x: permisos de grupo (lectura y ejecución).
+r-x: permisos para el resto (lectura y ejecución).
+Tipos de archivo (primer caracter):
+Tipo de archivo	Significado
+-	Archivo común
+d	Directorio
+l	Enlace simbólico
+s	Socket
+p	Pipe 
+Permisos numéricos
+Como hemos visto, tenemos caracteres para los permisos de archivos, pero es algo incómodo cambiar los permisos con caracteres. Para hacerlo más sencillo, podemos utilizar números.
+
+Van  a ser 3 números que van del 0 al 7:
+
+Primer número: permisos de propietario.
+Segundo número: permisos de grupo.
+Tercer número: permisos para el resto.
+Para representar del 0 al 7 necesitamos 3 bits, que son los 3 bits utilizados para dar permisos a propietario, grupo y al resto. Con un '1' damos permiso y con un '0' se lo quitamos. Va en el siguiente orden: rwx.
+
+Binario	Decimal	Permisos	Descripción
+000	0	- - -	Ningún permiso
+001	1	- - x	Ejecución
+010	2	- w -	Escritura
+011	3	- w x	Escritura y ejecución
+100	4	r - -	Lectura
+101	5	r - x	Lectura y ejecución
+110	6	r w -	Lectura y escritura
+111	7	r w x	Lectura, escritura y ejecución 
+Ejemplos
+644:
+
+Propietario: lectura y escritura.
+Grupo: lectura.
+Resto: lectura.
+755:
+
+Propietario: lectura, escritura y ejecución.
+Grupo: lectura y ejecución.
+Resto: lectura y ejecución.
+777:
+
+Propietario: lectura, escritura y ejecución.
+Grupo: lectura, escritura y ejecución.
+Resto: lectura, escritura y ejecución.
+Los permisos en Linux son algo muy importante para entender mejor cómo funciona nuestro sistema. Podemos utilizar la información de este artículo cuando usemos herramientas como chmod o mkdir a la hora de modificar permisos o crear nuevas carpetas o ficheros.
+
+
+
+Conoce la Arquitectura de Permisos de Linux al Detalle
+Unix, al igual que Linux, nació como un sistema multiusuario, concebido teniendo en mente que el sistema sería utilizado por múltiples usuarios. Seguro que muchas veces has oído hablar del famoso esquema o arquitectura de permisos de Linux, y de que es uno de los pilares sobre el que descansa la seguridad del sistema.
+
+En este post te intentare explicar todo lo que se respecto al tema, con el máximo grado de detalle que pueda, pero con palabras simples para que pueda ser perfectamente comprensible para cualquier persona que tenga las ganar de conocerlo. Sin más entretenimiento, te dejo con el índice del post para que tu mismo te organices. Espero que lo disfrutes y nos vemos en los comentarios;)
+
+Anuncios
+Tabla de contenidos:
+
+Como funcionan los permisos en Linux
+Estructura de usuarios y grupos
+Tipos de permisos
+Como se representan los permisos
+Como ver o conocer los permisos de un archivo o directorio
+Para terminar
+Como Funcionan los Permisos en Linux
+Los permisos en Linux funcionan según el mismo esquema que en Unix. Básicamente se aplican sobre archivos y sobre directorios, van asociados a usuarios o grupos, y pueden ser de lectura, de escritura o de ejecución.
+
+Dicho de otro modo, todos los archivos y directorios en Linux tienen asociado un conjunto de permisos que debe definir las posibilidades de lectura, escritura y ejecución que se aplican al usuario propietario del archivo, al grupo de usuarios al que pertenece, y al resto del mundo.
+
+Estructura de Usuarios y Grupos
+Anuncios
+Usuarios
+Como digo, GNU/Linux es un sistema multiusuario en el que conviven simultáneamente diferentes cuentas, desempeñando roles muy diversos. Cada usuario se identifica por un User ID o UID. A continuación tienes explicado de un modo sencillo los principales users que podemos encontrar:
+
+Root o superusuario. Por un lado tenemos a Root o superusuario (UID = 0), que es el único que tiene privilegios sobre todo el sistema, y el responsable de las tareas de administración del sistema, tales como la instalación y desinstalación de software, entre otras muchas. Para cualquier acción que necesite permisos de superusuario, el sistema requerirá las credenciales de root.
+Usuarios de sistema. Aparte, están los que podríamos denominar usuarios de sistema o especiales. Estos son los que van vinculados a ciertos servicios, y que pueden asumir ciertos privilegios relativos a este servicio. Se crean automáticamente en la instalación del sistema o de ciertas aplicaciones, como es el caso del antivirus ClamAV. Algunos ejemplos de estos usuarios son bin, mail, apache, clamav, pulse, avahi, syslog, colord, etc., pero realmente hay muchos más en cualquier instalación estándar.
+Usuarios estándar. Por último tenemos a las cuentas de usuarios individuales. De estas, pueden haber tantas como se requiera. Cada usuario estándar posee su directorio personal dentro de la /home. Allí se almacenan todos sus archivos personales, además de las preferencias de varias aplicaciones, archivos temporales, etc.
+Como pequeño paréntesis, solo decirte que en el post que te enlazo a continuación te cuento más en detalle sobre el usuario root y la gestión de privilegios que hacen la mayoría de distribuciones. Dicho esto, seguimos con el tema.
+
+Usuario Root
+Todos los usuarios en Linux suelen estar registrados en el archivo /etc/passwd. Puedes visualizar el contenido del fichero con el comando que tienes a continuación (como ves, para hacerlo necesitas permisos de superusuario).
+
+$ sudo cat /etc/passwd
+Grupos
+Para simplificar la gestión de permisos entre tantas cuentas, Linux agrupa todos los usuarios dentro de grupos. De este modo, a la hora de especificar ciertos permisos sobre un conjunto de cuentas, se pueden establecer los permisos directamente sobre el grupo. Cada grupo se identifica por un Group ID o GUID.
+
+Cada usuario pertenece por defecto a un grupo con el mismo nombre, que se conoce como grupo principal de usuario o grupo primario. Además, un mismo usuario puede estar dentro de otros grupos, que serían los secundarios.
+
+Los grupos en Linux quedan registrados en el archivo /etc/group, y puedes visualizar su contenido con el siguiente comando:
+
+$ sudo cat /etc/group
+Todos y cada uno de los ficheros en Linux son propiedad de un usuario y de un grupo, y sobre cada una de ellos recaen unos privilegios relativos al propietario, al grupo, y al resto del mundo. Y con esto enlazamos directamente con las siguientes lineas…
+
+Tipos de Permisos
+Privilegios de Usuario, Grupo y Otros
+De entrada, en cualquier fichero o carpeta hay tres tipos o niveles de privilegio, los que se aplican al propietario del archivo o carpeta, los que se aplican a todos los miembros del grupo al que pertenece el propietario, y los que se aplican a todos los demás. Para verlo con un poco más de detalle:
+
+Permisos del Usuario. Es el primer nivel de privilegios. Básicamente representa los permisos que se aplican al propietario de un determinado fichero o directorio.
+Permisos del Grupo. Estamos ante el segundo nivel de privilegios, que define los derechos de lectura, escritura y ejecución que se aplican solo a aquellos usuarios que pertenecen al mismo grupo que el propietario del fichero.
+Permisos de Otros. Este es el último nivel. Representan los privilegios de lectura, escritura y ejecución por parte del resto de usuarios que no entran en ninguno de los niveles anteriores.
+Permisos de Lectura, Escritura y Ejecución
+Como hemos dicho, sobre un archivo podemos definir básicamente tres tipos de permisos (lectura, escritura y ejecución). Estos se establecen tanto sobre archivos como sobre carpetas, pero existen algunas diferencias de matiz que verás si sigues leyendo.
+
+Lectura. Representan la posibilidad de poder acceder a un archivo o carpeta y leer su contenido. En un directorio hacen referencia a la posibilidad visualizar su contenido.
+Escritura. Definen la posibilidad de acceder y modificar el contenido de un archivo, o en caso de un directorio, la capacidad de borrar o añadir archivos dentro de él.
+Ejecución. Estos son los más críticos. Indican la posibilidad de ejecutar un determinado archivo en el sistema. En el caso de un directorio, los derechos de ejecución representan la capacidad de entrar dentro del directorio.
+Permisos Especiales
+Adicionalmente, existen tres bits de permisos especiales denominados setuid, setgid y sticky bit. Básicamente tratan de determinar ciertos tipos de privilegios que no quedan cubiertos con los anteriores. De forma resumida, podríamos decir que:
+
+El bit setuid se puede asignar a archivos ejecutables, y en este caso determina la posibilidad de que el proceso vinculado al archivo pueda adquirir los permisos del propietario en el momento de su ejecución. Normalmente se utiliza para que un usuario normal pueda ejecutar un cierto ejecutable con permisos elevados. Un claro ejemplo lo tenemos en su.
+El bit setgid, de forma análoga al caso de setuid, lo que determina es que el proceso se pueda ejecutar con los privilegios del grupo al que pertenece el fichero. Tienes más info en esta página de la Wiki.
+Por último, sticky bit se puede asociar a directorios en los que tienen acceso varios usuarios con permisos de escritura, y básicamente permite evitar que un usuario pueda borrar archivos de otro, dentro del mismo directorio.
+Tienes información más detallada sobre los tres en el blog de rm-rf. Visto ya todo esto, creo que es el momento de pasar a ver con más detalle como se representan los permisos. Ahora empieza lo más interesante…
+
+Como se Representan los Permisos
+Representación Estándar
+Los permisos asociados a un archivo o directorio se suelen representar en línea. El primer carácter se reserva para los denominados permisos especiales (básicamente hace referencia al tipo de archivo), seguido de tres caracteres para los privilegios del propietario del archivo, otros tres para los del grupo, y los tres últimos para los del resto de usuarios.
+
+Representacion de Permisos en Linux
+El primer bit indica el tipo de archivo. Generalmente pueden darse los siguientes casos:
+
+-  |  Se trata de un archivo regular
+d  |  Se trata de un directorio
+l  |  Se trata de un enlace simbólico
+b  |  Se trata de un archivo especial de bloques
+El resto de los 9 bits que vienen a continuación representan los permisos del propietario del fichero o directorio, los del grupo al que pertenece este usuario, y los del resto de usuarios. Aquí tienes el significado:
+
+r  |  Se dan permisos de lectura
+w  |  Se dan permisos de escritura
+x  |  Se dan permisos de ejecución
+-  |  No se da el permiso de lectura, escritura o ejecución
+Representación Numérica o en Octal
+También hay la representación numérica, que parte básicamente de la representación anterior, pero sustituye cada grupo rwx por un número. Ese número se obtiene al sustituir cada tipo de permiso (r, w y x) por un 1 o 0, dependiendo de si se da o no el permiso).
+
+Representación Numérica de Permisos en Linux
+Al final, del número en binario obtenido, el número decimal que le corresponde es el que se utiliza para representar las diferentes combinaciones rwx en cada grupo o nivel de permisos (usuario, grupo y otros).
+
+r--  |  100  |  4
+-w-  |  010  |  2
+--x  |  001  |  1
+Teniendo en cuenta esto, por cada nivel de privilegio (usuario, grupo u otros) podemos sacar un número que es la suma de todos los anteriores, dependiendo de los privilegios que se tengan. Con esto podemos llegar a tener las siguientes combinaciones:
+
+rwx  |  111  |  7
+rw-  |  110  |  6
+r-x  |  101  |  5
+r--  |  100  |  4
+-wx  |  011  |  3
+-w-  |  010  |  2
+--x  |  001  |  1
+---  |  000  |  0
+Teniendo esto en cuenta, la representación es igual que en el caso anterior, pero para cada uno de los niveles (usuario, grupo y otros) se sustituye la combinación de los tres tipos de permisos por un numero del 1 al 7, en función de las combinaciones anteriores.
+
+De este modo, tenemos el 777 como la combinación que representa el máximo nivel de permisos que se puede dar a un fichero (¡ojo con el 777!)
+
+
+Si sigues leyendo, un poco más adelante tienes varios ejemplos de archivos y carpetas, con sus permisos en formato estándar, y su equivalente en forma octal.
+
+Como Puedo Ver los Permisos de Fichero
+Hay varias formas hacerlo. Una es desde el mismo navegador de archivos y visualizándolo de forma gráfica, pero es un poco lento y a la práctica resulta mucho más cómodo y rápido hacerlo desde la línea de comandos.
+
+Utilizar el Explorador de Archivos
+Para verlo desde el mismo navegador de archivos, en Ubuntu o derivados es tan sencillo como hacer clic derecho sobre un archivo en cuestión, luego hacer clic en Propiedades, y dirigirte en la pestaña Permisos.
+
+Archivos de texto dentro de /home/user
+En esta imagen tienes el aspecto que tienen los permisos por defecto de cualquier archivo de texto (en este caso un archivo .odt) ubicado dentro de la carpeta Documentos del directorio de usuario.
+
+Como puedes ver, el propietario y el grupo tienen derechos de lectura y escritura sobre el mismo, mientras que el resto de usuarios solo tienen permiso de lectura.
+
+Visualizar Permisos de un Archivo
+Directorios Dentro de /home/user/
+Ahora si te parece podemos visualizar los permisos de los subdirectorios que se encuentran dentro de /home.
+
+Como puedes ver en la captura de abajo (para este ejemplo he cogido la carpeta Documentos), el usuario tiene permisos para crear y eliminar archivos (serían permisos de lectura y escritura), mientras que el grupo y el resto de usuarios tienen solo permisos de acceso (permisos de lectura).
+
+Visualizar Permisos de un Directorio
+Normalmente, cada fichero ya viene por defecto con el nivel de permisos que requiere (o que los mantenedores de la distribución han considerado más adecuados).
+
+Esto no quita que, por una necesidad específica, te interese dar permisos adicionales a un determinado fichero, o el revés, que te interese restringirlos. Todo eso es algo que se suele hacer utilizando la herramienta Chmod, pero como comento al final, esto lo explico en otro artículo con un enfoque más práctico.
+
+Como Visualizarlos desde la Consola con #ls -l
+Otra forma mucho más visual y precisa de ver los permisos que tienen los ficheros contenidos en un directorio es a través de la línea de comandos.
+
+Esto se hace con el comando #ls -l, que te listará todos los archivos y directorios dentro del directorio de trabajo actual, junto con los permisos asociados a cada uno de ellos.
+
+$ ls -l
+Archivos dentro de /home/user
+Si aplicas el comando estando en un directorio cualquiera, verás un listado con todos los archivos y subdirectorios contenidos en él, junto con permisos que se les aplican. Si te parece vamos a analizar los del ejemplo que hemos analizado antes para ver la equivalencia.
+
+$ ls -l Documentos
+
+-rw-rw-r-- 1 user group 27057 jun 28 12:37 nombrearchivo
+Como ves, el usuario y el grupo tienen derechos de lectura y escritura, mientras el resto de usuarios, solo de lectura. Igual que antes pero de un modo más preciso. El equivalente en formato numérico seria:
+
+664
+Directorios dentro de  /home/user/
+Ahora, al igual que hemos hecho desde el explorador, podemos analizar los permisos del directorio Documentos. Para ello, estando en la terminal y aplicando #ls -l, obtendrás un listado con todos los directorios dentro de /home, incluida la carpeta Documentos.
+
+$ ls -l
+drwxr-xr-x 2 user group 4096 jun 28 12:42 Descargas
+drwxr-xr-x 2 user group 4096 jun 28 12:42 Documentos
+drwxr-xr-x 2 user group 4096 jun 28 12:42 Escritorio
+drwxr-xr-x 2 user group 4096 jun 28 12:42 Imágenes
+drwxr-xr-x 2 user group 4096 jun 28 12:42 Música
+drwxr-xr-x 2 user group 4096 jun 28 12:42 Plantillas
+drwxr-xr-x 2 user group 4096 jun 28 12:42 Público
+drwxr-xr-x 2 user group 4096 jun 28 12:42 Vídeos
+Como ves, el propietario tiene privilegios de lectura, escritura y ejecución, mientras que el grupo y el resto de usuarios solo de lectura y ejecución. El equivalente en forma numérica es:
+
+755
+Recuerda que el derecho de ejecución sobre una carpeta representa la capacidad de poder acceder a ella. En este caso, todos los usuarios pueden entrar dentro los directorios de la /home de un usuario concreto y ver su contenido, pero solo el propietario puede modificar el contenido de dentro.
+
+La posibilidad de ejecutar este comando sobre un directorio lo determina el hecho que tengas permisos de lectura, por lo que en algunos casos quizá no obtengas resultado y debas hacerlo a través de sudo utilizando el “poder” de Root.
